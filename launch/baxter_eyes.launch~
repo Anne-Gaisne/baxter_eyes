@@ -1,0 +1,5 @@
+<launch>
+	<arg name="eye_contour" default="~/catkin_ws/src/baxter_eyes/src/assets/eyes-contours.png" />
+	<arg name="pupil" default="~/catkin_ws/src/baxter_eyes/src/assets/pupil.png" />
+    <node name="baxter_eyes_node" pkg="baxter_eyes" type="baxter_eyes_node" output="screen" args="$(arg eye_contour) $(arg pupil)"/>
+</launch>

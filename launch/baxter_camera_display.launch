@@ -1,0 +1,6 @@
+<launch>
+	<!-- One or two argument given to specify the camera topic to display -->
+	<arg name="camera_up_topic" default="/cameras/left_hand_camera/image"/>
+	<arg name="camera_low_topic" default="none"/>
+	<node name="baxter_camera_display_node" pkg="baxter_eyes" type="baxter_camera_display_node" output="screen" args="$(arg camera_up_topic) $(arg camera_low_topic)"/>
+</launch>

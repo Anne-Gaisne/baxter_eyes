@@ -1,0 +1,6 @@
+<launch>
+    <node name="baxter_arm_mvmt_detector_node" pkg="baxter_eyes" type="baxter_arm_mvmt_detector_node" output="screen"/>
+	<arg name="eye_contour" default="$(find baxter_eyes)/src/assets/eyes-contour.png" />
+	<arg name="pupil" default="$(find baxter_eyes)src/assets/pupils.png" />
+	<node name="baxter_eyes_node" pkg="baxter_eyes" type="baxter_eyes_node" output="screen" args="$(arg eye_contour) $(arg pupil)"/>
+</launch>

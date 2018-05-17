@@ -1,0 +1,3 @@
+<launch>
+    <node name="baxter_arm_mvmt_detector_node" pkg="baxter_eyes" type="baxter_arm_mvmt_detector_node" output="screen"/>
+</launch>
