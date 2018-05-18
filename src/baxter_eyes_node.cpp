@@ -9,7 +9,7 @@ int main(int argc, char** argv) {
     if(argc < 3){
         std::cout << std::endl;
         std::cout << "Not enough arguments provided." << std::endl;
-        std::cout << "Usage: <eye_contour image file> <pupil image file> <background image file>" << std::endl;
+        std::cout << "Usage: <eye_contour image file> <pupil image file>" << std::endl;
         return 0;
     }
 

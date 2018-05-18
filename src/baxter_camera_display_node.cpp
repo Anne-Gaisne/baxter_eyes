@@ -11,8 +11,18 @@ int main(int argc, char** argv) {
         std::cout << "Not enough arguments provided." << std::endl;
         std::cout << "Usage: <camera topic name> [<camera topic name>]" << std::endl;
         return 0;
-    } 
-    BaxterCameraDisplay BaxterCameraDisplay(nodeHandle, std::string(argv[1]), std::string(argv[2]));    
+    } else if (argc > 5) {
+        std::cout << std::endl;
+        std::cout << "Too many arguments provided." << std::endl;
+        std::cout << "Usage: only 4 camera topic name handeled" << std::endl;
+        return 0;
+    }
+    std::string topicsName[4];
+    topicsName[0] = argv[1];
+    topicsName[1] = argv[2];
+    topicsName[2] = argv[3];
+    topicsName[3] = argv[4];
+    BaxterCameraDisplay BaxterCameraDisplay(nodeHandle, topicsName);    
     
     ros::spin();
     

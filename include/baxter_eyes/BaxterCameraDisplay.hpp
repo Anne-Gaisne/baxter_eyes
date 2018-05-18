@@ -12,21 +12,22 @@ public:
 /*!
 * Constructor
 */
-    BaxterCameraDisplay(ros::NodeHandle& nodeHandle, std::string cameraTopicLow, std::string cameraTopicUp);
+    BaxterCameraDisplay(ros::NodeHandle& nodeHandle, std::string topicsName[]);
     virtual ~BaxterCameraDisplay();
 
 private:
     int nb_camera;
-    static const int UP_CAMERA = 0; //camera displayed on the upper part of the screen
-    static const int LOW_CAMERA = 1; //camera displayed on the lower part of the screen
+    static const int UP_LEFT_CAMERA = 0;
+    static const int LOW_LEFT_CAMERA = 1;
+    static const int UP_RIGHT_CAMERA = 2;
+    static const int LOW_RIGHT_CAMERA = 3;
 
-    void displayImage(cv::Mat& imageToDisplay, int position);
-    void lowCallback(const sensor_msgs::ImageConstPtr& msg);
-    void upCallback(const sensor_msgs::ImageConstPtr& msg);
+    void displayImage(cv::Mat& imageToDisplay, int positVertical, int positHorizontal, std::string frameName);
+    void displayCallback(const sensor_msgs::ImageConstPtr& msg, int position);
     void getMatFromMsgs(cv::Mat& matDest, const sensor_msgs::ImageConstPtr& msg);
     cv::Mat currentImageDisplayed;
     ros::NodeHandle nodeHandler;
     image_transport::ImageTransport imgTransport;
     image_transport::Publisher pub;
-    image_transport::Subscriber sub[2];
+    image_transport::Subscriber sub[4];
 };

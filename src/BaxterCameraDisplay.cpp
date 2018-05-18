@@ -1,33 +1,39 @@
 #include <ros/ros.h>
 #include "baxter_eyes/BaxterCameraDisplay.hpp"
 
-BaxterCameraDisplay::BaxterCameraDisplay(ros::NodeHandle& nodeHandle, std::string cameraTopicUp, std::string cameraTopicLow):
+BaxterCameraDisplay::BaxterCameraDisplay(ros::NodeHandle& nodeHandle, std::string topicsName[]):
+    nb_camera(0),
     nodeHandler(nodeHandle),
     imgTransport(nodeHandler),
     currentImageDisplayed(600, 1024, CV_8UC4, cv::Scalar(255, 255, 255)) {
         pub = imgTransport.advertise("/robot/xdisplay", 10);
-        sub[UP_CAMERA] = imgTransport.subscribe(cameraTopicUp, 100, &BaxterCameraDisplay::upCallback, this);
-        if (cameraTopicLow == "none") {
-            nb_camera = 1;
-        } else {
-            nb_camera = 2;
-            sub[LOW_CAMERA] = imgTransport.subscribe(cameraTopicLow, 100, &BaxterCameraDisplay::lowCallback, this);
+        int i = 0;
+        int posit = UP_LEFT_CAMERA;
+        while (i < 4 && topicsName[i]!="none") {
+            nb_camera++;
+            sub[i] = imgTransport.subscribe(topicsName[i], 100, boost::bind(&BaxterCameraDisplay::displayCallback, this, _1, posit));
+            posit++;
+            i++;
         }
     }
 
 BaxterCameraDisplay::~BaxterCameraDisplay() {}
 
-void BaxterCameraDisplay::lowCallback(const sensor_msgs::ImageConstPtr& msg) {
-    cv::Mat lowImage;
-    getMatFromMsgs(lowImage, msg);
-    cv::putText(lowImage, "here is some text", cv::Point(5,5), cv::FONT_HERSHEY_COMPLEX_SMALL, 1.0, cv::Scalar(255,255,255), 1, CV_AA);
-    displayImage(lowImage, LOW_CAMERA);
-}
-
-void BaxterCameraDisplay::upCallback(const sensor_msgs::ImageConstPtr& msg) {
-    cv::Mat upImage;
-    getMatFromMsgs(upImage, msg);
-    displayImage(upImage, UP_CAMERA);
+void BaxterCameraDisplay::displayCallback(const sensor_msgs::ImageConstPtr& msg, int position) {
+    cv::Mat img;
+    getMatFromMsgs(img, msg);
+    std::string frameStr = msg->header.frame_id;
+    std::replace( frameStr.begin(), frameStr.end(), '/', ' ');
+    std::replace( frameStr.begin(), frameStr.end(), '_', ' ');
+    int positVertical = 0;
+    int positHorizontal = 0;
+    if (position == LOW_LEFT_CAMERA || position == LOW_RIGHT_CAMERA) {
+        positVertical = 1;
+    }
+    if (position == LOW_RIGHT_CAMERA || position == UP_RIGHT_CAMERA) {
+        positHorizontal = 1;
+    }    
+    displayImage(img, positVertical, positHorizontal, frameStr);
 }
 
 void BaxterCameraDisplay::getMatFromMsgs(cv::Mat& matDest, const sensor_msgs::ImageConstPtr& msg) {
@@ -41,9 +47,27 @@ void BaxterCameraDisplay::getMatFromMsgs(cv::Mat& matDest, const sensor_msgs::Im
     }
 }
 
-void BaxterCameraDisplay::displayImage(cv::Mat& imageToDisplay, int position) {
-    cv::resize(imageToDisplay, imageToDisplay, cv::Size(1024, 600/nb_camera), 0, 0, cv::INTER_CUBIC);
-    imageToDisplay.copyTo(currentImageDisplayed(cv::Rect(0, 300*position, imageToDisplay.cols, imageToDisplay.rows)));
+void BaxterCameraDisplay::displayImage(cv::Mat& imageToDisplay, int positVertical, int positHorizontal, std::string frameName) {
+    int width = 1024;
+    int height = 600;
+    if (nb_camera >= 3) {
+        width = width/2;
+    }
+    if (nb_camera >= 2) {
+        height = height/2;
+    }
+    cv::resize(imageToDisplay, imageToDisplay, cv::Size(width, height), 0, 0, cv::INTER_CUBIC);
+    imageToDisplay.copyTo(currentImageDisplayed(cv::Rect(512*positHorizontal, 300*positVertical, imageToDisplay.cols, imageToDisplay.rows)));
+        
+    int fontface = cv::FONT_HERSHEY_DUPLEX;
+    double scale = 1.0;
+    int thickness = 1;
+    int baseline = 0;
+    cv::Point pt((25 + 512*positHorizontal), (50 + 300*positVertical));
+    cv::Size text = cv::getTextSize(frameName, fontface, scale, thickness, &baseline);
+    cv::rectangle(currentImageDisplayed, pt + cv::Point(0, baseline+5), pt + cv::Point(text.width, -text.height-5), CV_RGB(0,0,0), CV_FILLED);
+    cv::putText(currentImageDisplayed, frameName, pt, fontface, scale, CV_RGB(255,255,255), thickness, 8);
+    
     sensor_msgs::ImagePtr imageMsg = cv_bridge::CvImage(std_msgs::Header(), "bgra8", currentImageDisplayed).toImageMsg();
     pub.publish(imageMsg);
 }
