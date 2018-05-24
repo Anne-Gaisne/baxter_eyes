@@ -9,8 +9,6 @@ namespace baxter_eyes {
             pupil = cv::imread(pathPupil, CV_LOAD_IMAGE_UNCHANGED);
             pub = imgTransport.advertise("/robot/xdisplay", 100);
             sub = nodeHandler.subscribe("/pointToLookAt", 100, &BaxterEyes::lookCallback, this);
-            //display default look
-            displayEyes(Point());
         }
 
     BaxterEyes::~BaxterEyes() {}
@@ -22,7 +20,6 @@ namespace baxter_eyes {
 
     void BaxterEyes::displayEyes(const Point& pointToLookAt) {
         cv::Mat background(600, 1024, eyeContour.type(), cv::Scalar(255, 255, 255));
-        ROS_INFO_STREAM("point to look at : " << pointToLookAt.getX() << " y : " << pointToLookAt.getY());
         Point pupilPosition = getPupilPosition(pointToLookAt);
 
         //combine the contour with the pupil at the right position in a single image to create a message

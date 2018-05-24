@@ -22,6 +22,7 @@ namespace baxter_eyes {
             void displayEyes(const Point& pointToLookAt);
             Point getPupilPosition(const Point& pointToLookAt);
             void overlayImage(cv::Mat* src, cv::Mat* overlay, const Point& location);
+
             ros::NodeHandle nodeHandler;
             image_transport::ImageTransport imgTransport;
             image_transport::Publisher pub;

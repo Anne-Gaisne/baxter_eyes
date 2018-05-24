@@ -25,6 +25,7 @@ private:
     void displayImage(cv::Mat& imageToDisplay, int positVertical, int positHorizontal, std::string frameName);
     void displayCallback(const sensor_msgs::ImageConstPtr& msg, int position);
     void getMatFromMsgs(cv::Mat& matDest, const sensor_msgs::ImageConstPtr& msg);
+
     cv::Mat currentImageDisplayed;
     ros::NodeHandle nodeHandler;
     image_transport::ImageTransport imgTransport;

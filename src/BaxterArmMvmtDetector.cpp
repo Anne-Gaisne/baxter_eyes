@@ -17,12 +17,9 @@
                 Point originRightPast = Point(tfRightArmPast.getOrigin(), 100.0);
                 msg = Point().toGeometryMessage();
                 if (originLeftNow != originLeftPast && originRightNow != originRightPast) {
-                    ROS_INFO_STREAM("Left and right arms moved");
                 } else if (originLeftNow != originLeftPast) {
-                    ROS_INFO_STREAM("Left arm moved");
                     msg = originLeftNow.toGeometryMessage();
                 } else if (originRightNow != originRightPast) {
-                    ROS_INFO_STREAM("right arm moved");
                     msg = originRightNow.toGeometryMessage();
                 }
                 tfLeftArmPast = tfLeftArmNow;
