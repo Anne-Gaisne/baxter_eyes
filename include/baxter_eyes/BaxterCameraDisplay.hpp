@@ -27,8 +27,7 @@ private:
 
     int nb_camera;
     cv::Mat currentImageDisplayed;
-    ros::NodeHandle nodeHandler;
     image_transport::ImageTransport imgTransport;
-    image_transport::Publisher pub;
+    image_transport::Publisher publisherToXDisplay;
     image_transport::Subscriber subToCameraImage[4]; 
 };

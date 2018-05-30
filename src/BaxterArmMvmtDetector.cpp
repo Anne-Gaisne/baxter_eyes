@@ -3,7 +3,7 @@
 
     BaxterArmMvmtDetector::BaxterArmMvmtDetector(ros::NodeHandle& nodeHandle):
         nodeHandler(nodeHandle) {
-            pub = nodeHandler.advertise<geometry_msgs::Point>("/pointToLookAt", 100);            
+            publishPointToLookAt = nodeHandler.advertise<geometry_msgs::Point>("/pointToLookAt", 100);            
             ros::Rate loop_rate(5);
             lookupTransform("/head_camera", "/left_hand", ros::Time(0), tfLeftArmPast);
             lookupTransform("/head_camera", "/right_hand", ros::Time(0), tfRightArmPast);
@@ -27,7 +27,7 @@
                 }
                 tfLeftArmPast = tfLeftArmNow;
                 tfRightArmPast = tfRightArmNow;
-                pub.publish(msg);
+                publishPointToLookAt.publish(msg);
                 ros::spinOnce();
                 loop_rate.sleep();
             }
@@ -37,7 +37,7 @@
 
     void BaxterArmMvmtDetector::lookupTransform(const std::string &target_frame, const std::string &source_frame, const ros::Time &time, tf::StampedTransform &transform) const {
         try{
-            listener.lookupTransform(target_frame, source_frame, ros::Time(0), transform);
+            listenerToArmTransform.lookupTransform(target_frame, source_frame, ros::Time(0), transform);
         } catch (tf::TransformException ex) {
             ROS_ERROR("%s",ex.what());
             ros::Duration(1.0).sleep();

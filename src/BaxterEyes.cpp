@@ -7,8 +7,8 @@ namespace baxter_eyes {
         imgTransport(nodeHandler) {
             eyeContour = cv::imread(pathEyeContour, CV_LOAD_IMAGE_UNCHANGED);
             pupil = cv::imread(pathPupil, CV_LOAD_IMAGE_UNCHANGED);
-            pub = imgTransport.advertise("/robot/xdisplay", 100);
-            sub = nodeHandler.subscribe("/pointToLookAt", 100, &BaxterEyes::lookCallback, this);
+            publisherToXDisplay = imgTransport.advertise("/robot/xdisplay", 100);
+            subscriberPointToLookAt = nodeHandler.subscribe("/pointToLookAt", 100, &BaxterEyes::lookCallback, this);
         }
 
     BaxterEyes::~BaxterEyes() {}
@@ -26,7 +26,7 @@ namespace baxter_eyes {
         overlayImage(&background, &pupil, pupilPosition);
         overlayImage(&background, &eyeContour, Point());
         sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgra8", background).toImageMsg();
-        pub.publish(msg);
+        publisherToXDisplay.publish(msg);
     }
 
     Point BaxterEyes::getPupilPosition(const Point& pointToLookAt) {

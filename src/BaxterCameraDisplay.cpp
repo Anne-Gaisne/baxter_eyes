@@ -3,10 +3,9 @@
 
 BaxterCameraDisplay::BaxterCameraDisplay(ros::NodeHandle& nodeHandle, std::string topicsName[]):
     nb_camera(0),
-    nodeHandler(nodeHandle),
-    imgTransport(nodeHandler),
+    imgTransport(nodeHandle),
     currentImageDisplayed(600, 1024, CV_8UC4, cv::Scalar(255, 255, 255)) {
-        pub = imgTransport.advertise("/robot/xdisplay", 10);
+        publisherToXDisplay = imgTransport.advertise("/robot/xdisplay", 10);
         int i = 0;
         int posit = UP_LEFT_CAMERA;
         while (i < 4 && topicsName[i]!="none") {
@@ -74,5 +73,5 @@ void BaxterCameraDisplay::displayImage(cv::Mat& imageToDisplay, int positVertica
     cv::putText(currentImageDisplayed, frameName, pt, fontface, scale, CV_RGB(255,255,255), thickness, 8);
     
     sensor_msgs::ImagePtr imageMsg = cv_bridge::CvImage(std_msgs::Header(), "bgra8", currentImageDisplayed).toImageMsg();
-    pub.publish(imageMsg);
+    publisherToXDisplay.publish(imageMsg);
 }

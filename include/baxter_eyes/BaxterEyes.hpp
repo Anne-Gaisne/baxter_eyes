@@ -25,8 +25,8 @@ namespace baxter_eyes {
 
             ros::NodeHandle nodeHandler;
             image_transport::ImageTransport imgTransport;
-            image_transport::Publisher pub;
-            ros::Subscriber sub;
+            image_transport::Publisher publisherToXDisplay;
+            ros::Subscriber subscriberPointToLookAt;
             cv::Mat eyeContour;
             cv::Mat pupil;
     };
