@@ -22,7 +22,7 @@ namespace baxter_eyes {
         cv::Mat background(600, 1024, eyeContour.type(), cv::Scalar(255, 255, 255));
         Point pupilPosition = getPupilPosition(pointToLookAt);
 
-        //combine the contour with the pupil at the right position in a single image to create a message
+        //combine the contour with the pupil at the right position in a single image to create a message to publish on xDisplay topic
         overlayImage(&background, &pupil, pupilPosition);
         overlayImage(&background, &eyeContour, Point());
         sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgra8", background).toImageMsg();

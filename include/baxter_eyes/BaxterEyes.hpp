@@ -21,7 +21,7 @@ namespace baxter_eyes {
             void lookCallback(const geometry_msgs::Point::ConstPtr& msg);
             void displayEyes(const Point& pointToLookAt);
             Point getPupilPosition(const Point& pointToLookAt);
-            void overlayImage(cv::Mat* src, cv::Mat* overlay, const Point& location);
+            void overlayImage(cv::Mat* src, cv::Mat* overlay, const Point& location); //used to overlay image using the alpha channel (transparency)
 
             ros::NodeHandle nodeHandler;
             image_transport::ImageTransport imgTransport;

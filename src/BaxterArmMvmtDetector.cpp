@@ -17,9 +17,12 @@
                 Point originRightPast = Point(tfRightArmPast.getOrigin(), 100.0);
                 msg = Point().toGeometryMessage();
                 if (originLeftNow != originLeftPast && originRightNow != originRightPast) {
+                    //movement of both arms
                 } else if (originLeftNow != originLeftPast) {
+                    //movement of left arm
                     msg = originLeftNow.toGeometryMessage();
                 } else if (originRightNow != originRightPast) {
+                    //movement of right arm
                     msg = originRightNow.toGeometryMessage();
                 }
                 tfLeftArmPast = tfLeftArmNow;

@@ -14,11 +14,13 @@
 
         private:
             void lookupTransform(const std::string &target_frame, const std::string &source_frame, const ros::Time &time, tf::StampedTransform &transform) const;
+            //used for communication with the robot
             ros::NodeHandle nodeHandler;
             ros::Publisher pub;
             ros::Subscriber sub;
             tf::TransformListener listener;
 
+            //used for knowing arm movement
             tf::StampedTransform tfLeftArmPast;
             tf::StampedTransform tfLeftArmNow;
             tf::StampedTransform tfRightArmPast;

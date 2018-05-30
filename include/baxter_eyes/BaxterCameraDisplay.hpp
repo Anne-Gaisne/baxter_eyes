@@ -16,7 +16,6 @@ public:
     virtual ~BaxterCameraDisplay();
 
 private:
-    int nb_camera;
     static const int UP_LEFT_CAMERA = 0;
     static const int LOW_LEFT_CAMERA = 1;
     static const int UP_RIGHT_CAMERA = 2;
@@ -26,9 +25,10 @@ private:
     void displayCallback(const sensor_msgs::ImageConstPtr& msg, int position);
     void getMatFromMsgs(cv::Mat& matDest, const sensor_msgs::ImageConstPtr& msg);
 
+    int nb_camera;
     cv::Mat currentImageDisplayed;
     ros::NodeHandle nodeHandler;
     image_transport::ImageTransport imgTransport;
     image_transport::Publisher pub;
-    image_transport::Subscriber sub[4];
+    image_transport::Subscriber subToCameraImage[4]; 
 };

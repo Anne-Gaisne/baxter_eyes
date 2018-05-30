@@ -11,7 +11,7 @@ BaxterCameraDisplay::BaxterCameraDisplay(ros::NodeHandle& nodeHandle, std::strin
         int posit = UP_LEFT_CAMERA;
         while (i < 4 && topicsName[i]!="none") {
             nb_camera++;
-            sub[i] = imgTransport.subscribe(topicsName[i], 100, boost::bind(&BaxterCameraDisplay::displayCallback, this, _1, posit));
+            subToCameraImage[i] = imgTransport.subscribe(topicsName[i], 100, boost::bind(&BaxterCameraDisplay::displayCallback, this, _1, posit));
             posit++;
             i++;
         }
@@ -22,9 +22,11 @@ BaxterCameraDisplay::~BaxterCameraDisplay() {}
 void BaxterCameraDisplay::displayCallback(const sensor_msgs::ImageConstPtr& msg, int position) {
     cv::Mat img;
     getMatFromMsgs(img, msg);
+    //get frame id to display
     std::string frameStr = msg->header.frame_id;
     std::replace( frameStr.begin(), frameStr.end(), '/', ' ');
     std::replace( frameStr.begin(), frameStr.end(), '_', ' ');
+    //get position of the image to display on screen
     int positVertical = 0;
     int positHorizontal = 0;
     if (position == LOW_LEFT_CAMERA || position == LOW_RIGHT_CAMERA) {
@@ -56,9 +58,12 @@ void BaxterCameraDisplay::displayImage(cv::Mat& imageToDisplay, int positVertica
     if (nb_camera >= 2) {
         height = height/2;
     }
+    //resize camera image to fill its given part on screen
     cv::resize(imageToDisplay, imageToDisplay, cv::Size(width, height), 0, 0, cv::INTER_CUBIC);
+    //add the resized image to the currentImageDisplayed to get the correct image to display on the full screen
     imageToDisplay.copyTo(currentImageDisplayed(cv::Rect(512*positHorizontal, 300*positVertical, imageToDisplay.cols, imageToDisplay.rows)));
         
+    //add frame name on the image
     int fontface = cv::FONT_HERSHEY_DUPLEX;
     double scale = 1.0;
     int thickness = 1;
