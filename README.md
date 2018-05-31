@@ -18,15 +18,11 @@ To display camera's image :
 ```
 roslaunch baxter_eyes baxter_camera_display.launch
 ```
-This will display the left hand camera's image on screen.
+This will display the left hand camera's, the right hand camera's and the kinect's image on screen.
 To display another camera on screen :
 - make sure it is openned
 - use :
 ```
-roslaunch baxter_eyes baxter_camera_display.launch camera_up_topic:=<your camera's output topic name>
+rosrun baxter_eyes baxter_camera_display.launch <camera topic name> <camera topic name> <camera topic name> <camera topic name>
 ```
-
-You can also display up to two camera on baxter screen :
-```
-roslaunch baxter_eyes baxter_camera_display.launch camera_up_topic:=<your first camera's output topic name> camera_low_topic:=<your second camera's output topic name>
-```
+If you give an unkown topic or a topic that doesn't send message with type sensor_msgs/Image, it will not be displayed thus you can only display one camera on screen just by putting your camera topic name first and "none" for other topic name.

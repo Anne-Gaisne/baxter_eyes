@@ -8,10 +8,12 @@ BaxterCameraDisplay::BaxterCameraDisplay(ros::NodeHandle& nodeHandle, std::strin
         publisherToXDisplay = imgTransport.advertise("/robot/xdisplay", 10);
         int i = 0;
         int posit = UP_LEFT_CAMERA;
-        while (i < 4 && topicsName[i]!="none") {
-            nb_camera++;
-            subToCameraImage[i] = imgTransport.subscribe(topicsName[i], 100, boost::bind(&BaxterCameraDisplay::displayCallback, this, _1, posit));
-            posit++;
+        while (i < 4) {
+            if (isImageTopic(topicsName[i])) {
+                nb_camera++;
+                subToCameraImage[i] = imgTransport.subscribe(topicsName[i], 100, boost::bind(&BaxterCameraDisplay::displayCallback, this, _1, posit));
+                posit++;
+            }
             i++;
         }
     }
@@ -74,4 +76,16 @@ void BaxterCameraDisplay::displayImage(cv::Mat& imageToDisplay, int positVertica
     
     sensor_msgs::ImagePtr imageMsg = cv_bridge::CvImage(std_msgs::Header(), "bgra8", currentImageDisplayed).toImageMsg();
     publisherToXDisplay.publish(imageMsg);
+}
+
+bool BaxterCameraDisplay::isImageTopic(std::string name) {
+    ros::master::V_TopicInfo masterTopics;
+    ros::master::getTopics(masterTopics);
+    ros::master::V_TopicInfo::iterator it = masterTopics.begin();
+    ros::master::TopicInfo& info = *it;
+    while (it != masterTopics.end() && (info.name != name || info.datatype != "sensor_msgs/Image")) {
+        info = *it;
+        it++;
+    }
+    return it != masterTopics.end();
 }

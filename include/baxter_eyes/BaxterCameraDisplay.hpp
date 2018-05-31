@@ -24,6 +24,7 @@ private:
     void displayImage(cv::Mat& imageToDisplay, int positVertical, int positHorizontal, std::string frameName);
     void displayCallback(const sensor_msgs::ImageConstPtr& msg, int position);
     void getMatFromMsgs(cv::Mat& matDest, const sensor_msgs::ImageConstPtr& msg);
+    bool isImageTopic(std::string name);
 
     int nb_camera;
     cv::Mat currentImageDisplayed;

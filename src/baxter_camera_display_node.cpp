@@ -6,15 +6,11 @@ int main(int argc, char** argv) {
     ros::init(argc, argv, "baxter_camera_display_node");
     ros::NodeHandle nodeHandle("~");
 
-    if(argc < 2){
+    if(argc != 5){
         std::cout << std::endl;
-        std::cout << "Not enough arguments provided." << std::endl;
-        std::cout << "Usage: <camera topic name> [<camera topic name>]" << std::endl;
-        return 0;
-    } else if (argc > 5) {
-        std::cout << std::endl;
-        std::cout << "Too many arguments provided." << std::endl;
-        std::cout << "Usage: only 4 camera topic name handeled" << std::endl;
+        std::cout << "Wrong number of arguments provided." << std::endl;
+        std::cout << "Usage: <camera topic name> <camera topic name> <camera topic name> <camera topic name>" << std::endl;
+        std::cout << "To not display 4 camera just enter none in place of camera topic name" << std::endl;
         return 0;
     }
     std::string topicsName[4];
