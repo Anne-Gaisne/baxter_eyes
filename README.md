@@ -5,6 +5,13 @@ This package allow the display of eyes that follow arm mouvement or camera's out
 ## Installation
 
 Clone this repository into your catkin workspace and build it.
+If you want to use the file quaternion-transform.cpp :
+```
+cd ~/catkin_ws/src/baxter_eyes/util
+cp quaternion-transform.cpp ~/catkin_ws
+cd ~/catkin_ws
+g++ -o quaternion-transform quaternion-transform.cpp -std=c++11
+```
 
 ## Usage
 
