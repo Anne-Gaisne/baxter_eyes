@@ -139,7 +139,8 @@ include_directories(
 ## The recommended prefix ensures that target names across packages don't collide
  add_executable(${PROJECT_NAME}_node src/baxter_eyes_node.cpp src/BaxterEyes.cpp src/Point.cpp)
  add_executable(baxter_arm_mvmt_detector_node src/BaxterArmMvmtDetector.cpp src/baxter_arm_mvmt_detector_node.cpp src/Point.cpp)
- add_executable(baxter_camera_display_node src/baxter_camera_display_node src/BaxterCameraDisplay.cpp src/Point.cpp)
+ add_executable(baxter_camera_display_node src/baxter_camera_display_node.cpp src/BaxterCameraDisplay.cpp src/Point.cpp)
+ add_executable(face_detector_node src/face_detector_node.cpp src/FaceDetector.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -159,6 +160,9 @@ include_directories(
   ${catkin_LIBRARIES}
  )
  target_link_libraries(baxter_camera_display_node
+  ${catkin_LIBRARIES}
+ )
+ target_link_libraries(face_detector_node
   ${catkin_LIBRARIES}
  )
  

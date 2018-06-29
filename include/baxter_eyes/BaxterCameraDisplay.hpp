@@ -8,27 +8,27 @@
 #include "baxter_eyes/Point.hpp"
 
 class BaxterCameraDisplay {
-public:
-/*!
-* Constructor
-*/
-    BaxterCameraDisplay(ros::NodeHandle& nodeHandle, std::string topicsName[]);
-    virtual ~BaxterCameraDisplay();
+    public:
+    /*!
+    * Constructor
+    */
+        BaxterCameraDisplay(ros::NodeHandle& nodeHandle, std::string topicsName[]);
+        virtual ~BaxterCameraDisplay();
 
-private:
-    static const int UP_LEFT_CAMERA = 0;
-    static const int LOW_LEFT_CAMERA = 1;
-    static const int UP_RIGHT_CAMERA = 2;
-    static const int LOW_RIGHT_CAMERA = 3;
+    private:
+        static const int UP_LEFT_CAMERA = 0;
+        static const int LOW_LEFT_CAMERA = 1;
+        static const int UP_RIGHT_CAMERA = 2;
+        static const int LOW_RIGHT_CAMERA = 3;
 
-    void displayImage(cv::Mat& imageToDisplay, int positVertical, int positHorizontal, std::string frameName);
-    void displayCallback(const sensor_msgs::ImageConstPtr& msg, int position);
-    void getMatFromMsgs(cv::Mat& matDest, const sensor_msgs::ImageConstPtr& msg);
-    bool isImageTopic(std::string name);
+        void displayImage(cv::Mat& imageToDisplay, int positVertical, int positHorizontal, std::string frameName);
+        void displayCallback(const sensor_msgs::ImageConstPtr& msg, int position);
+        void getMatFromMsgs(cv::Mat& matDest, const sensor_msgs::ImageConstPtr& msg);
+        bool isImageTopic(std::string name);
 
-    int nb_camera;
-    cv::Mat currentImageDisplayed;
-    image_transport::ImageTransport imgTransport;
-    image_transport::Publisher publisherToXDisplay;
-    image_transport::Subscriber subToCameraImage[4]; 
+        int nb_camera;
+        cv::Mat currentImageDisplayed;
+        image_transport::ImageTransport imgTransport;
+        image_transport::Publisher publisherToXDisplay;
+        image_transport::Subscriber subToCameraImage[4];
 };

@@ -42,8 +42,14 @@ void BaxterCameraDisplay::displayCallback(const sensor_msgs::ImageConstPtr& msg,
 void BaxterCameraDisplay::getMatFromMsgs(cv::Mat& matDest, const sensor_msgs::ImageConstPtr& msg) {
     cv_bridge::CvImagePtr ptrImg;
     try {
-        ptrImg = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGRA8);
-        matDest = ptrImg->image;
+        if (sensor_msgs::image_encodings::isColor(msg->encoding)) {
+            ptrImg = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGRA8);
+            matDest = ptrImg->image;
+        } else {
+            ptrImg = cv_bridge::toCvCopy(msg, msg->encoding);
+            matDest = ptrImg->image;
+            cvtColor(matDest, matDest, CV_GRAY2BGRA);
+        }
     } catch (cv_bridge::Exception& e) {
         ROS_ERROR("cv_bridge exception: %s", e.what());
         return;
